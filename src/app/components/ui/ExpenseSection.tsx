@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Card from "@/components/ui/Card";
+import Card  from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -60,8 +60,8 @@ export function ExpenseSection({ initialExpenses = [] }: ExpenseSectionProps) {
           onChange={(e) => setActualCost(e.target.value)}
           className="w-full"
         />
-        <Select value={month} onValueChange={setMonth} className="w-full">
-          <SelectTrigger>
+        <Select value={month} onValueChange={setMonth}>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select Month" />
           </SelectTrigger>
           <SelectContent>
