@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface IncomeSectionProps {
   initialMonthlyIncome?: string;
@@ -16,7 +18,6 @@ export function IncomeSection({ initialMonthlyIncome = "", initialExtraIncome = 
     console.log("Updating income:", { monthlyIncome, extraIncome });
     setMonthlyIncome("");
     setExtraIncome("");
-    // Placeholder for API call
   };
 
   return (

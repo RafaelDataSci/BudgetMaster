@@ -5,7 +5,7 @@ interface CardProps {
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, className = '' }) => {
+export const Card: React.FC<CardProps> = ({ children, className = '' }) => {
   return (
     <div
       className={`border border-gray-200 rounded-lg shadow-md p-4 bg-white hover:shadow-lg transition-shadow duration-200 ${className}`}
@@ -14,5 +14,3 @@ const Card: React.FC<CardProps> = ({ children, className = '' }) => {
     </div>
   );
 };
-
-export default Card;
