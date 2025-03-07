@@ -1,43 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Reset default styles for consistency */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Base styles for the app */
 body {
   font-family: 'Helvetica', Arial, sans-serif;
   background-color: #F5F5F5;
   color: #333;
-  line-height: 1.6;
+  scroll-behavior: smooth;
 }
 
-/* Typography */
-h1, h2, h3 {
-  color: #333;
-  font-weight: 600;
-}
-
-h1 {
-  font-size: 2.25rem;
-  color: #AED581;
-}
-
-h2 {
-  font-size: 1.5rem;
-}
-
-/* Card styles for Apple-like look */
 .card {
   background-color: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 16px;
   transition: box-shadow 0.2s ease;
 }
 
@@ -45,7 +22,15 @@ h2 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Input and Select styles */
+button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
 input, select {
   border: 1px solid #E5E7EB;
   border-radius: 8px;
@@ -56,88 +41,38 @@ input, select {
 
 input:focus, select:focus {
   outline: none;
-  border-color: #007AFF;
-  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+  border-color: #00ADEF;
+  box-shadow: 0 0 0 3px rgba(0, 173, 239, 0.1);
 }
 
-/* Button styles */
-button {
-  background-color: #007AFF;
-  color: #FFFFFF;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.bg-td-blue {
+  background-color: #00ADEF;
 }
 
-button:hover {
-  background-color: #005BB5;
+.bg-td-green {
+  background-color: #00A650;
 }
 
-/* Specific button variants */
-button.green {
-  background-color: #AED581;
+.text-td-blue {
+  color: #00ADEF;
 }
 
-button.green:hover {
-  background-color: #8BC34A;
+.text-td-green {
+  color: #00A650;
 }
 
-button.red {
-  background-color: #EF4444;
+button.bg-td-blue:hover {
+  background-color: #008BCF;
 }
 
-button.red:hover {
+button.bg-td-green:hover {
+  background-color: #008A40;
+}
+
+button.bg-red-600:hover {
   background-color: #DC2626;
 }
 
-/* Metric styles */
-.metric {
-  font-size: 1.25rem;
-  font-weight: 500;
-}
-
-.metric.green {
-  color: #AED581;
-}
-
-.metric.red {
-  color: #EF4444;
-}
-
-/* Table styles */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #E5E7EB;
-}
-
-.table th {
-  background-color: #F9FAFB;
-  font-weight: 600;
-  color: #666;
-}
-
-.table tr:hover {
-  background-color: #F1F5F9;
-}
-
-/* Ensure containers have proper spacing */
-main {
-  padding: 2rem;
-  max-width: 64rem;
-  margin: 0 auto;
-}
-
-.space-y-6 > * + * {
-  margin-top: 1.5rem;
+button.bg-gray-600:hover {
+  background-color: #4B5563;
 }

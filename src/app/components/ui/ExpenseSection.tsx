@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Card } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/app/components/ui/table";
 import { useBudget } from "@/app/context/BudgetContext";
+import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
 export function ExpenseSection() {
   const { data, setData } = useBudget();
@@ -14,15 +14,11 @@ export function ExpenseSection() {
   const [projectedCost, setProjectedCost] = useState("");
   const [actualCost, setActualCost] = useState("");
   const [month, setMonth] = useState("January");
+  const [year, setYear] = useState(new Date().getFullYear().toString());
   const [notes, setNotes] = useState("");
   const [editingExpense, setEditingExpense] = useState<typeof data.expenses[0] | null>(null);
   const [sortField, setSortField] = useState<keyof typeof data.expenses[0] | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ];
 
   const sortedExpenses = [...data.expenses].sort((a, b) => {
     if (!sortField) return 0;
@@ -55,6 +51,7 @@ export function ExpenseSection() {
       projectedCost: parseFloat(projectedCost),
       actualCost: parseFloat(actualCost),
       month,
+      year,
       notes,
     };
     const updatedExpenses = editingExpense
@@ -77,6 +74,7 @@ export function ExpenseSection() {
       setProjectedCost(expense.projectedCost.toString());
       setActualCost(expense.actualCost.toString());
       setMonth(expense.month);
+      setYear(expense.year);
       setNotes(expense.notes || "");
     }
   };
@@ -96,8 +94,14 @@ export function ExpenseSection() {
     setProjectedCost("");
     setActualCost("");
     setMonth("January");
+    setYear(new Date().getFullYear().toString());
     setNotes("");
     setEditingExpense(null);
+  };
+
+  const getSortIcon = (field: keyof typeof data.expenses[0]) => {
+    if (sortField !== field) return <FaSort className="ml-1" />;
+    return sortDirection === "asc" ? <FaSortUp className="ml-1" /> : <FaSortDown className="ml-1" />;
   };
 
   return (
@@ -124,16 +128,18 @@ export function ExpenseSection() {
           onChange={(e) => setActualCost(e.target.value)}
           className="w-full"
         />
-        <Select value={month} onValueChange={setMonth}>
-          <SelectTrigger className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <SelectValue placeholder="Select Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {months.map((m) => (
-              <SelectItem key={m} value={m}>{m}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Input
+          placeholder="Month (e.g., January)"
+          value={month}
+          onChange={(e) => setMonth(e.target.value)}
+          className="w-full"
+        />
+        <Input
+          placeholder="Year (e.g., 2024)"
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+          className="w-full"
+        />
         <Input
           placeholder="Notes"
           value={notes}
@@ -149,29 +155,43 @@ export function ExpenseSection() {
           </Button>
         )}
       </div>
-      <Table className="mt-4 border border-gray-300 rounded">
+      <Table className="mt-4 w-full">
         <TableHeader>
           <TableRow className="bg-gray-100">
-            <TableHead className="p-2 cursor-pointer" onClick={() => handleSort("category")}>Category</TableHead>
-            <TableHead className="p-2 cursor-pointer" onClick={() => handleSort("projectedCost")}>Projected</TableHead>
-            <TableHead className="p-2 cursor-pointer" onClick={() => handleSort("actualCost")}>Actual</TableHead>
-            <TableHead className="p-2 cursor-pointer" onClick={() => handleSort("month")}>Month</TableHead>
-            <TableHead className="p-2 cursor-pointer" onClick={() => handleSort("notes")}>Notes</TableHead>
-            <TableHead className="p-2">Actions</TableHead>
+            <TableHead onClick={() => handleSort("category")}>
+              Category {getSortIcon("category")}
+            </TableHead>
+            <TableHead onClick={() => handleSort("projectedCost")}>
+              Projected {getSortIcon("projectedCost")}
+            </TableHead>
+            <TableHead onClick={() => handleSort("actualCost")}>
+              Actual {getSortIcon("actualCost")}
+            </TableHead>
+            <TableHead onClick={() => handleSort("month")}>
+              Month {getSortIcon("month")}
+            </TableHead>
+            <TableHead onClick={() => handleSort("year")}>
+              Year {getSortIcon("year")}
+            </TableHead>
+            <TableHead onClick={() => handleSort("notes")}>
+              Notes {getSortIcon("notes")}
+            </TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {sortedExpenses.map((expense, index) => (
             <TableRow key={expense.id} className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}>
-              <TableCell className="p-2">{expense.category}</TableCell>
-              <TableCell className="p-2">${expense.projectedCost.toFixed(2)}</TableCell>
-              <TableCell className={`p-2 ${expense.actualCost > expense.projectedCost ? "text-red-600" : "text-blue-800"}`}>
+              <TableCell>{expense.category}</TableCell>
+              <TableCell>${expense.projectedCost.toFixed(2)}</TableCell>
+              <TableCell className={expense.actualCost > expense.projectedCost ? "text-red-600" : "text-td-blue"}>
                 ${expense.actualCost.toFixed(2)}
               </TableCell>
-              <TableCell className="p-2">{expense.month}</TableCell>
-              <TableCell className="p-2">{expense.notes || ""}</TableCell>
-              <TableCell className="p-2">
-                <Button onClick={() => editExpense(expense.id)} className="mr-2 bg-blue-600 hover:bg-blue-700">
+              <TableCell>{expense.month}</TableCell>
+              <TableCell>{expense.year}</TableCell>
+              <TableCell>{expense.notes || ""}</TableCell>
+              <TableCell>
+                <Button onClick={() => editExpense(expense.id)} className="mr-2 bg-td-blue hover:bg-blue-700">
                   Edit
                 </Button>
                 <Button onClick={() => deleteExpense(expense.id)} className="bg-red-600 hover:bg-red-700">

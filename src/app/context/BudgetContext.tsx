@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface Expense {
   id: number;
@@ -8,12 +8,20 @@ interface Expense {
   projectedCost: number;
   actualCost: number;
   month: string;
+  year: string;
   notes?: string;
+}
+
+interface Income {
+  monthlyIncome: string;
+  extraIncome: string;
+  month: string;
+  year: string;
 }
 
 interface BudgetData {
   expenses: Expense[];
-  income: { monthlyIncome: string; extraIncome: string };
+  income: Income[];
 }
 
 interface BudgetContextType {
@@ -23,17 +31,11 @@ interface BudgetContextType {
 
 const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
 
-export function BudgetProvider({ children }: { children: React.ReactNode }) {
+export function BudgetProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<BudgetData>({
     expenses: [],
-    income: { monthlyIncome: "0", extraIncome: "0" },
+    income: [],
   });
-
-  useEffect(() => {
-    fetch("/api/data")
-      .then((res) => res.json())
-      .then((fetchedData) => setData(fetchedData));
-  }, []);
 
   return (
     <BudgetContext.Provider value={{ data, setData }}>
@@ -44,7 +46,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
 
 export function useBudget() {
   const context = useContext(BudgetContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useBudget must be used within a BudgetProvider");
   }
   return context;

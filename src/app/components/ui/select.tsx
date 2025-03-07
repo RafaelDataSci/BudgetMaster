@@ -9,9 +9,9 @@ interface SelectProps {
 
 export const Select: React.FC<SelectProps> = ({ value, onValueChange, children, className = "" }) => (
   <select
-    value={value}
+    value={value} // Use the value prop here
     onChange={(e) => onValueChange(e.target.value)}
-    className={`border border-gray-300 rounded-md p-2 ${className}`}
+    className={`w-full ${className}`}
   >
     {children}
   </select>

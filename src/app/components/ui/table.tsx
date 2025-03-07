@@ -21,8 +21,14 @@ export const TableRow: React.FC<TableProps> = ({ children, className = "" }) => 
   <tr className={className}>{children}</tr>
 );
 
-export const TableHead: React.FC<TableProps> = ({ children, className = "" }) => (
-  <th className={`border-b p-2 text-left ${className}`}>{children}</th>
+interface TableHeadProps extends TableProps {
+  onClick?: () => void; // Add onClick prop
+}
+
+export const TableHead: React.FC<TableHeadProps> = ({ children, className = "", onClick }) => (
+  <th className={`border-b p-2 text-left ${className}`} onClick={onClick}>
+    {children}
+  </th>
 );
 
 export const TableCell: React.FC<TableProps> = ({ children, className = "" }) => (
