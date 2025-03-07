@@ -12,7 +12,7 @@
 /* Base styles for the app */
 body {
   font-family: 'Helvetica', Arial, sans-serif;
-  background-color: #F5F5F5; /* Light gray background */
+  background-color: #F5F5F5;
   color: #333;
   line-height: 1.6;
 }
@@ -24,12 +24,12 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: 2.25rem; /* 36px */
-  color: #AED581; /* Soft green for the app title */
+  font-size: 2.25rem;
+  color: #AED581;
 }
 
 h2 {
-  font-size: 1.5rem; /* 24px */
+  font-size: 1.5rem;
 }
 
 /* Card styles for Apple-like look */
@@ -47,7 +47,7 @@ h2 {
 
 /* Input and Select styles */
 input, select {
-  border: 1px solid #E5E7EB; /* Light gray border */
+  border: 1px solid #E5E7EB;
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 1rem;
@@ -56,13 +56,13 @@ input, select {
 
 input:focus, select:focus {
   outline: none;
-  border-color: #007AFF; /* Deep blue on focus */
+  border-color: #007AFF;
   box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
 }
 
 /* Button styles */
 button {
-  background-color: #007AFF; /* Deep blue for buttons */
+  background-color: #007AFF;
   color: #FFFFFF;
   border: none;
   padding: 10px 20px;
@@ -74,24 +74,24 @@ button {
 }
 
 button:hover {
-  background-color: #005BB5; /* Darker blue on hover */
+  background-color: #005BB5;
 }
 
 /* Specific button variants */
 button.green {
-  background-color: #AED581; /* Soft green for income-related actions */
+  background-color: #AED581;
 }
 
 button.green:hover {
-  background-color: #8BC34A; /* Darker green on hover */
+  background-color: #8BC34A;
 }
 
 button.red {
-  background-color: #EF4444; /* Red for expense-related actions */
+  background-color: #EF4444;
 }
 
 button.red:hover {
-  background-color: #DC2626; /* Darker red on hover */
+  background-color: #DC2626;
 }
 
 /* Metric styles */
@@ -134,10 +134,10 @@ button.red:hover {
 /* Ensure containers have proper spacing */
 main {
   padding: 2rem;
-  max-width: 64rem; /* 1024px */
+  max-width: 64rem;
   margin: 0 auto;
 }
 
 .space-y-6 > * + * {
-  margin-top: 1.5rem; /* Consistent spacing between sections */
+  margin-top: 1.5rem;
 }
