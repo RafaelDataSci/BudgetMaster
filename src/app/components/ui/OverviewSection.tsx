@@ -8,12 +8,12 @@ interface OverviewSectionProps {
 
 export function OverviewSection({ totalIncome, totalSpent, netBalance }: OverviewSectionProps) {
   return (
-    <Card className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <Card className="card">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Financial Overview</h2>
       <div className="space-y-2">
-        <p className="text-xl font-medium text-green-600">Total Income: ${totalIncome.toFixed(2)}</p>
-        <p className="text-xl font-medium text-red-600">Total Spent: ${totalSpent.toFixed(2)}</p>
-        <p className={`text-xl font-medium ${netBalance >= 0 ? "text-green-600" : "text-red-600"}`}>
+        <p className="metric green">Total Income: ${totalIncome.toFixed(2)}</p>
+        <p className="metric red">Total Spent: ${totalSpent.toFixed(2)}</p>
+        <p className={`metric ${netBalance >= 0 ? "green" : "red"}`}>
           Net Balance: ${netBalance.toFixed(2)}
         </p>
       </div>

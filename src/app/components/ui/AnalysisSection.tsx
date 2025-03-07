@@ -8,7 +8,7 @@ interface AnalysisSectionProps {
 
 export function AnalysisSection({ suggestions, unusualSpending, budgetScore }: AnalysisSectionProps) {
   return (
-    <Card className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <Card className="card">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Budget Analysis</h2>
       <div className="space-y-2">
         {suggestions.map((suggestion, index) => (

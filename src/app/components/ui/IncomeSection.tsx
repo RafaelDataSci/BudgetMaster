@@ -21,7 +21,7 @@ export function IncomeSection({ initialMonthlyIncome = "", initialExtraIncome = 
   };
 
   return (
-    <Card className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <Card className="card">
       <h2 className="text-2xl font-bold mb-4 text-green-600">Income Management</h2>
       <Input
         placeholder="Monthly Income ($)"
@@ -37,7 +37,7 @@ export function IncomeSection({ initialMonthlyIncome = "", initialExtraIncome = 
         onChange={(e) => setExtraIncome(e.target.value)}
         className="mb-4 w-full"
       />
-      <Button onClick={handleUpdate} className="bg-green-600 hover:bg-green-700 w-full">
+      <Button onClick={handleUpdate} className="green w-full">
         Update Earnings
       </Button>
     </Card>

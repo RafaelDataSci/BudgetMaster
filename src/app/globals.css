@@ -23,7 +23,6 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
-/* Custom styles for sections */
 h1 {
   font-size: 2.25rem; /* 36px */
   color: #AED581; /* Soft green for the app title */
@@ -36,6 +35,7 @@ h2 {
 /* Card styles for Apple-like look */
 .card {
   background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.2s ease;
@@ -129,4 +129,15 @@ button.red:hover {
 
 .table tr:hover {
   background-color: #F1F5F9;
+}
+
+/* Ensure containers have proper spacing */
+main {
+  padding: 2rem;
+  max-width: 64rem; /* 1024px */
+  margin: 0 auto;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem; /* Consistent spacing between sections */
 }
