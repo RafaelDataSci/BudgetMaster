@@ -5,10 +5,15 @@ import { Card } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/app/components/ui/table";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
 import { useBudget } from "@/app/context/BudgetContext";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
-export function ExpenseSection() {
+interface ExpenseSectionProps {
+  expand?: boolean;
+}
+
+export function ExpenseSection({ expand = false }: ExpenseSectionProps) {
   const { data, setData } = useBudget();
   const [category, setCategory] = useState("");
   const [projectedCost, setProjectedCost] = useState("");
@@ -19,6 +24,11 @@ export function ExpenseSection() {
   const [editingExpense, setEditingExpense] = useState<typeof data.expenses[0] | null>(null);
   const [sortField, setSortField] = useState<keyof typeof data.expenses[0] | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
 
   const sortedExpenses = [...data.expenses].sort((a, b) => {
     if (!sortField) return 0;
@@ -105,7 +115,7 @@ export function ExpenseSection() {
   };
 
   return (
-    <Card className="card">
+    <Card className={`card ${expand ? "h-full" : ""}`}>
       <h2 className="text-2xl font-bold mb-4 text-red-600 text-center">Expense Tracking</h2>
       <div className="space-y-4">
         <Input
@@ -128,12 +138,16 @@ export function ExpenseSection() {
           onChange={(e) => setActualCost(e.target.value)}
           className="w-full"
         />
-        <Input
-          placeholder="Month (e.g., January)"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          className="w-full"
-        />
+        <Select value={month} onValueChange={setMonth}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Month" />
+          </SelectTrigger>
+          <SelectContent>
+            {months.map((m) => (
+              <SelectItem key={m} value={m}>{m}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Input
           placeholder="Year (e.g., 2024)"
           value={year}
@@ -155,7 +169,7 @@ export function ExpenseSection() {
           </Button>
         )}
       </div>
-      <Table className="mt-4 w-full">
+      <Table className={`mt-4 w-full ${expand ? "h-[calc(100%-200px)]" : ""}`}>
         <TableHeader>
           <TableRow className="bg-gray-100">
             <TableHead onClick={() => handleSort("category")}>

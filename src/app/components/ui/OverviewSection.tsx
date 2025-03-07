@@ -14,16 +14,17 @@ export function OverviewSection() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+  // Filter expenses and income for the selected month and year
   const expensesForMonthYear = data.expenses.filter(
     (exp) => exp.month === selectedMonth && exp.year === selectedYear
   );
   const incomeForMonthYear = data.income.find(
     (inc) => inc.month === selectedMonth && inc.year === selectedYear
-  );
+  ) || { monthlyIncome: "0", extraIncome: "0", month: selectedMonth, year: selectedYear }; // Default to 0 if no income
 
   const totalSpent = expensesForMonthYear.reduce((sum, exp) => sum + exp.actualCost, 0);
-  const monthlyIncome = parseFloat(incomeForMonthYear?.monthlyIncome || "0");
-  const extraIncome = parseFloat(incomeForMonthYear?.extraIncome || "0");
+  const monthlyIncome = parseFloat(incomeForMonthYear.monthlyIncome || "0");
+  const extraIncome = parseFloat(incomeForMonthYear.extraIncome || "0");
   const totalIncome = monthlyIncome + extraIncome;
   const netBalance = totalIncome - totalSpent;
 
@@ -31,7 +32,7 @@ export function OverviewSection() {
     { name: "Income", value: totalIncome, fill: "#00A650" },
     { name: "Spent", value: totalSpent, fill: "#FF3B30" },
     { name: "Net Balance", value: netBalance, fill: "#00ADEF" },
-  ];
+  ].filter((item) => item.value >= 0); // Filter out negative or invalid values
 
   return (
     <Card className="card">

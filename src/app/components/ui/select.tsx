@@ -9,7 +9,7 @@ interface SelectProps {
 
 export const Select: React.FC<SelectProps> = ({ value, onValueChange, children, className = "" }) => (
   <select
-    value={value} // Use the value prop here
+    value={value}
     onChange={(e) => onValueChange(e.target.value)}
     className={`w-full ${className}`}
   >

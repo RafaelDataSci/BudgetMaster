@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
+import { Select, SelectItem } from "@/app/components/ui/select";
 import { useBudget } from "@/app/context/BudgetContext";
 
 export function IncomeSection() {
@@ -21,20 +21,34 @@ export function IncomeSection() {
   ];
 
   const handleUpdate = async () => {
-    if (!monthlyIncome && extraIncome) {
-      setError("Please enter Monthly Income before adding Extra Income.");
+    console.log("Attempting to add income:", { month, year, monthlyIncome, extraIncome });
+    if (!monthlyIncome && !extraIncome) {
+      setError("Please enter at least Monthly Income or Extra Income.");
       return;
     }
     setError("");
+
     const newIncome = { month, year, monthlyIncome, extraIncome };
     const updatedIncome = [...data.income, newIncome];
-    await fetch("/api/data", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "income", income: updatedIncome }),
-    });
-    setData({ ...data, income: updatedIncome });
-    resetForm();
+    console.log("Updated income array:", updatedIncome);
+
+    try {
+      const response = await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "income", income: updatedIncome }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save income data");
+      }
+      const result = await response.json();
+      console.log("API response:", result);
+      setData({ ...data, income: updatedIncome });
+      resetForm();
+    } catch (err) {
+      console.error("Error saving income:", err);
+      setError("Failed to save income. Check the console for details.");
+    }
   };
 
   const resetForm = () => {
@@ -47,15 +61,10 @@ export function IncomeSection() {
     <Card className="card">
       <h2 className="text-2xl font-bold mb-4 text-td-green text-center">Income Management</h2>
       <div className="space-y-4">
-        <Select value={month} onValueChange={setMonth}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {months.map((m) => (
-              <SelectItem key={m} value={m}>{m}</SelectItem>
-            ))}
-          </SelectContent>
+        <Select value={month} onValueChange={setMonth} className="w-full">
+          {months.map((m) => (
+            <SelectItem key={m} value={m}>{m}</SelectItem>
+          ))}
         </Select>
         <Input
           placeholder="Year (e.g., 2024)"
