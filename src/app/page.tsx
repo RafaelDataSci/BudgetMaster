@@ -1,11 +1,11 @@
-import { IncomeSection } from "~/components/IncomeSection";
-import { ExpenseSection } from "~/components/ExpenseSection";
-import { OverviewSection } from "~/components/OverviewSection";
-import { AnalysisSection } from "~/components/AnalysisSection";
-import { ExportSection } from "~/components/ExportSection";
+import { IncomeSection } from "@/components/ui/IncomeSection";
+import { ExpenseSection } from "@/components/ui/ExpenseSection";
+import { OverviewSection } from "@/components/ui/OverviewSection";
+import { AnalysisSection } from "@/components/ui/AnalysisSection";
+import { ExportSection } from "@/components/ui/ExportSection";
 
 export default function Home() {
-  // Placeholder data for demonstration (to be replaced with API data)
+  // Placeholder data
   const totalIncome = 5000;
   const totalSpent = 3000;
   const netBalance = totalIncome - totalSpent;
@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <main className="p-8 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold mb-6">BudgetMaster</h1>
+      <h1 className="text-3xl font-bold mb-6 text-green-600">BudgetMaster</h1>
       <IncomeSection />
       <ExpenseSection />
       <OverviewSection totalIncome={totalIncome} totalSpent={totalSpent} netBalance={netBalance} />
