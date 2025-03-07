@@ -10,7 +10,6 @@ export function IncomeSection() {
   const [extraIncome, setExtraIncome] = useState("");
 
   const handleUpdate = () => {
-    // Placeholder for API call to update income
     console.log("Updating income:", { monthlyIncome, extraIncome });
     setMonthlyIncome("");
     setExtraIncome("");
