@@ -1,17 +1,20 @@
-"use client";
+import React from "react";
 
-import { Button } from "@/app/components/ui/button";
-
-export function TestButton() {
-  const handleClick = () => {
-    console.log("Test button clicked");
-  };
-
-  return (
-    <div>
-      <Button onClick={handleClick} className="bg-blue-500">
-        Test Button
-      </Button>
-    </div>
-  );
+// Define the ButtonProps interface
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string;
 }
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className = "", ...props }, ref) => {
+    return (
+      <button
+        className={`text-white ${className}`}
+        ref={ref}
+        {...props} // This passes onClick and other props to the native button
+      />
+    );
+  }
+);
+
+Button.displayName = "Button";

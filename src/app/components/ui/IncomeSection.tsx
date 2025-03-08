@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Card } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/input";
-import { Button } from "@/app/components/ui/button";
 import { Select, SelectItem } from "@/app/components/ui/select";
 import { useBudget } from "@/app/context/BudgetContext";
 
@@ -20,47 +19,23 @@ export function IncomeSection() {
     "July", "August", "September", "October", "November", "December",
   ];
 
-  const handleUpdate = async () => {
-    console.log("Button clicked - handleUpdate called");
-    console.log("Attempting to add income:", { month, year, monthlyIncome, extraIncome });
-    if (!monthlyIncome && !extraIncome) {
-      setError("Please enter at least Monthly Income or Extra Income.");
+  const handleAddIncome = () => {
+    const monthly = parseFloat(monthlyIncome) || 0;
+    const extra = parseFloat(extraIncome) || 0;
+    if (monthly === 0 && extra === 0) {
+      setError("Please enter at least one income value.");
       return;
     }
-    setError("");
-
-    const newIncome = { month, year, monthlyIncome, extraIncome };
-    const updatedIncome = [...data.income, newIncome];
-    console.log("Updated income array:", updatedIncome);
-
-    try {
-      const response = await fetch("/api/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "income", income: updatedIncome }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to save income data");
-      }
-      const result = await response.json();
-      console.log("API response:", result);
-      setData({ ...data, income: updatedIncome });
-      resetForm();
-    } catch (err) {
-      console.error("Error saving income:", err);
-      setError("Failed to save income. Check the console for details.");
-    }
-  };
-
-  const resetForm = () => {
+    const newIncome = { month, year, monthlyIncome: monthly, extraIncome: extra };
+    setData({ ...data, income: [...data.income, newIncome] });
     setMonthlyIncome("");
     setExtraIncome("");
     setError("");
   };
 
   return (
-    <Card className="card">
-      <h2 className="text-2xl font-bold mb-4 text-td-green text-center">Income Management</h2>
+    <Card className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+      <h2 className="text-2xl font-bold mb-4 text-green-600 text-center">Income Management</h2>
       <div className="space-y-4">
         <Select value={month} onValueChange={setMonth} className="w-full">
           {months.map((m) => (
@@ -88,9 +63,12 @@ export function IncomeSection() {
           className="w-full"
         />
         {error && <p className="text-red-600 text-sm">{error}</p>}
-        <Button onClick={handleUpdate} className="bg-td-green hover:bg-green-700 w-full">
+        <button
+          onClick={handleAddIncome}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
           Add Income
-        </Button>
+        </button>
       </div>
     </Card>
   );

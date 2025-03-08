@@ -11,19 +11,11 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, children, 
   <select
     value={value}
     onChange={(e) => onValueChange(e.target.value)}
-    className={`w-full ${className}`}
+    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
   >
     {children}
   </select>
 );
-
-export const SelectTrigger: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => (
-  <div className={className}>{children}</div>
-);
-
-export const SelectValue: React.FC<{ placeholder: string }> = ({ placeholder }) => <span>{placeholder}</span>;
-
-export const SelectContent: React.FC<{ children: React.ReactNode }> = ({ children }) => <>{children}</>;
 
 export const SelectItem: React.FC<{ value: string; children: React.ReactNode }> = ({ value, children }) => (
   <option value={value}>{children}</option>

@@ -1,42 +1,63 @@
 "use client";
 
-import { IncomeSection } from "@/app/components/ui/IncomeSection";
-import { ExpenseSection } from "@/app/components/ui/ExpenseSection";
-import { OverviewSection } from "@/app/components/ui/OverviewSection";
-import { AnalysisSection } from "@/app/components/ui/AnalysisSection";
-import { ExportSection } from "@/app/components/ui/ExportSection";
-import { BudgetProvider } from "@/app/context/BudgetContext";
-import { useBudget } from "@/app/context/BudgetContext";
-import { TestButton } from "@/app/components/ui/TestButton"; // Import the TestButton component
+import { useEffect, useState } from 'react';
+import { useBudget } from '@/app/context/BudgetContext';
+import { IncomeSection } from '@/app/components/ui/IncomeSection';
+import { ExpenseSection } from '@/app/components/ui/ExpenseSection';
+import { FinancialOverview } from '@/app/components/ui/FinancialOverview';
+import { AnalysisSection } from '@/app/components/ui/AnalysisSection';
 
 export default function Home() {
   const { data } = useBudget();
-  const suggestions = ["Reduce dining out expenses.", "Increase savings by 10%."];
-  const unusualSpending = "High entertainment spending detected!";
-  const budgetScore = 75;
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [unusualSpending, setUnusualSpending] = useState<string>('');
+  const [budgetScore, setBudgetScore] = useState<number>(0);
+
+  useEffect(() => {
+    if (data) {
+      // Calculate totals from context data
+      const totalIncome = data.income.reduce((sum, inc) => sum + inc.amount, 0);
+      const totalExpenses = data.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+      const entertainmentSpending = data.expenses
+        .filter(exp => exp.category === "Entertainment")
+        .reduce((sum, exp) => sum + exp.actualCost, 0);
+
+      // Generate dynamic suggestions
+      const newSuggestions = totalExpenses > totalIncome
+        ? ["Reduce dining out expenses.", "Increase savings by 10%"]
+        : ["Maintain current spending."];
+
+      // Detect unusual spending
+      const newUnusualSpending = entertainmentSpending > 500
+        ? "High entertainment spending detected!"
+        : "No unusual spending.";
+
+      // Calculate budget score
+      const newBudgetScore = totalIncome > 0
+        ? Math.round((totalIncome - totalExpenses) / totalIncome * 100)
+        : 0;
+
+      // Update state
+      setSuggestions(newSuggestions);
+      setUnusualSpending(newUnusualSpending);
+      setBudgetScore(newBudgetScore);
+    }
+  }, [data]);
 
   return (
-    <BudgetProvider>
-      <main className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
-        <h1 className="text-4xl font-bold mb-8 text-td-green text-center">BudgetMaster</h1>
-        <TestButton /> {/* Add TestButton here for testing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="relative">
-            <IncomeSection />
-            {data.income.length === 0 && (
-              <div className="absolute inset-0 bg-transparent z-10"></div>
-            )}
-          </div>
-          <ExpenseSection expand={data.income.length === 0} />
-        </div>
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <OverviewSection />
-          <AnalysisSection suggestions={suggestions} unusualSpending={unusualSpending} budgetScore={budgetScore} />
-        </div>
-        <div className="mt-8 flex justify-center">
-          <ExportSection />
-        </div>
-      </main>
-    </BudgetProvider>
+    <div className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <IncomeSection />
+        <ExpenseSection />
+      </div>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FinancialOverview />
+        <AnalysisSection
+          suggestions={suggestions}
+          unusualSpending={unusualSpending}
+          budgetScore={budgetScore}
+        />
+      </div>
+    </div>
   );
 }

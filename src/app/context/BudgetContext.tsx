@@ -2,26 +2,9 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-interface Expense {
-  id: number;
-  category: string;
-  projectedCost: number;
-  actualCost: number;
-  month: string;
-  year: string;
-  notes?: string;
-}
-
-interface Income {
-  monthlyIncome: string;
-  extraIncome: string;
-  month: string;
-  year: string;
-}
-
 interface BudgetData {
-  expenses: Expense[];
-  income: Income[];
+  income: { month: string; year: string; monthlyIncome: number; extraIncome: number }[];
+  expenses: { id: number; category: string; projectedCost: number; actualCost: number; month: string; year: string; notes?: string }[];
 }
 
 interface BudgetContextType {
@@ -32,11 +15,7 @@ interface BudgetContextType {
 const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
 
 export function BudgetProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<BudgetData>({
-    expenses: [],
-    income: [],
-  });
-
+  const [data, setData] = useState<BudgetData>({ income: [], expenses: [] });
   return (
     <BudgetContext.Provider value={{ data, setData }}>
       {children}
