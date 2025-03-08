@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 
 interface AnalysisSectionProps {
@@ -6,7 +8,7 @@ interface AnalysisSectionProps {
   budgetScore: number;
 }
 
-export const AnalysisSection: React.FC<AnalysisSectionProps> = ({ suggestions, unusualSpending, budgetScore }) => {
+const AnalysisSection: React.FC<AnalysisSectionProps> = ({ suggestions, unusualSpending, budgetScore }) => {
   return (
     <div>
       <h2>Analysis Section</h2>
@@ -20,3 +22,5 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({ suggestions, u
     </div>
   );
 };
+
+export default AnalysisSection;

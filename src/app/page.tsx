@@ -5,7 +5,7 @@ import { useBudget } from '@/app/context/BudgetContext';
 import { IncomeSection } from '@/app/components/ui/IncomeSection';
 import { ExpenseSection } from '@/app/components/ui/ExpenseSection';
 import { FinancialOverview } from '@/app/components/ui/FinancialOverview';
-import { AnalysisSection } from '@/app/components/ui/AnalysisSection';
+import AnalysisSection from '@/app/components/ui/AnalysisSection';
 
 export default function Home() {
   const { data } = useBudget();
@@ -15,29 +15,22 @@ export default function Home() {
 
   useEffect(() => {
     if (data) {
-      // Calculate totals from context data
-      const totalIncome = data.income.reduce((sum, inc) => sum + inc.amount, 0);
-      const totalExpenses = data.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+      const totalIncome = data.income.reduce((sum, inc) => sum + inc.monthlyIncome + inc.extraIncome, 0);
+      const totalExpenses = data.expenses.reduce((sum, exp) => sum + exp.actualCost, 0);
       const entertainmentSpending = data.expenses
         .filter(exp => exp.category === "Entertainment")
         .reduce((sum, exp) => sum + exp.actualCost, 0);
 
-      // Generate dynamic suggestions
       const newSuggestions = totalExpenses > totalIncome
         ? ["Reduce dining out expenses.", "Increase savings by 10%"]
         : ["Maintain current spending."];
-
-      // Detect unusual spending
       const newUnusualSpending = entertainmentSpending > 500
         ? "High entertainment spending detected!"
         : "No unusual spending.";
-
-      // Calculate budget score
       const newBudgetScore = totalIncome > 0
         ? Math.round((totalIncome - totalExpenses) / totalIncome * 100)
         : 0;
 
-      // Update state
       setSuggestions(newSuggestions);
       setUnusualSpending(newUnusualSpending);
       setBudgetScore(newBudgetScore);
