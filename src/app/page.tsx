@@ -7,6 +7,7 @@ import { AnalysisSection } from "@/app/components/ui/AnalysisSection";
 import { ExportSection } from "@/app/components/ui/ExportSection";
 import { BudgetProvider } from "@/app/context/BudgetContext";
 import { useBudget } from "@/app/context/BudgetContext";
+import { TestButton } from "@/app/components/ui/TestButton"; // Import the TestButton component
 
 export default function Home() {
   const { data } = useBudget();
@@ -18,6 +19,7 @@ export default function Home() {
     <BudgetProvider>
       <main className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
         <h1 className="text-4xl font-bold mb-8 text-td-green text-center">BudgetMaster</h1>
+        <TestButton /> {/* Add TestButton here for testing */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="relative">
             <IncomeSection />

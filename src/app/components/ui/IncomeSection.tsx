@@ -21,6 +21,7 @@ export function IncomeSection() {
   ];
 
   const handleUpdate = async () => {
+    console.log("Button clicked - handleUpdate called");
     console.log("Attempting to add income:", { month, year, monthlyIncome, extraIncome });
     if (!monthlyIncome && !extraIncome) {
       setError("Please enter at least Monthly Income or Extra Income.");

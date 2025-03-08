@@ -5,7 +5,7 @@ import { Card } from "@/app/components/ui/Card";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/app/components/ui/table";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
+import { Select, SelectItem } from "@/app/components/ui/select";
 import { useBudget } from "@/app/context/BudgetContext";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
@@ -54,7 +54,13 @@ export function ExpenseSection({ expand = false }: ExpenseSectionProps) {
   };
 
   const addOrUpdateExpense = async () => {
-    if (!category || !projectedCost || !actualCost) return;
+    console.log("Button clicked - addOrUpdateExpense called");
+    console.log("Attempting to add/update expense:", { category, projectedCost, actualCost, month, year, notes });
+    if (!category || !projectedCost || !actualCost) {
+      console.log("Validation failed: Missing required fields");
+      return;
+    }
+
     const expense = {
       id: editingExpense ? editingExpense.id : Date.now(),
       category,
@@ -67,13 +73,24 @@ export function ExpenseSection({ expand = false }: ExpenseSectionProps) {
     const updatedExpenses = editingExpense
       ? data.expenses.map((exp) => (exp.id === expense.id ? expense : exp))
       : [...data.expenses, expense];
-    setData({ ...data, expenses: updatedExpenses });
-    await fetch("/api/data", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "expenses", expenses: updatedExpenses }),
-    });
-    resetForm();
+    console.log("Updated expenses array:", updatedExpenses);
+
+    try {
+      const response = await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "expenses", expenses: updatedExpenses }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save expense data");
+      }
+      const result = await response.json();
+      console.log("API response:", result);
+      setData({ ...data, expenses: updatedExpenses });
+      resetForm();
+    } catch (err) {
+      console.error("Error saving expense:", err);
+    }
   };
 
   const editExpense = (id: number) => {
@@ -138,15 +155,10 @@ export function ExpenseSection({ expand = false }: ExpenseSectionProps) {
           onChange={(e) => setActualCost(e.target.value)}
           className="w-full"
         />
-        <Select value={month} onValueChange={setMonth}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {months.map((m) => (
-              <SelectItem key={m} value={m}>{m}</SelectItem>
-            ))}
-          </SelectContent>
+        <Select value={month} onValueChange={setMonth} className="w-full">
+          {months.map((m) => (
+            <SelectItem key={m} value={m}>{m}</SelectItem>
+          ))}
         </Select>
         <Input
           placeholder="Year (e.g., 2024)"
